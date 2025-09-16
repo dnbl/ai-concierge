@@ -155,8 +155,7 @@ const App: React.FC = () => {
                         {messages.length === 0 ? (
                             <WelcomeScreen
                                 onActionClick={(action) => handleSend(action)}
-                                onSendMessage={(message) => handleSend(message, attachment)}
-                                onAttachmentClick={() => setAttachment(null)}
+                                onSendMessage={(message, file) => handleSend(message, file)}
                                 className="flex-1"
                             />
                         ) : (
@@ -180,8 +179,7 @@ const App: React.FC = () => {
                                 <div className="border-t border-gray-700 bg-gray-900 p-4">
                                     <SmartInput
                                         placeholder="Message Aura AI..."
-                                        onSend={(message) => handleSend(message, attachment)}
-                                        onAttachmentClick={() => setAttachment(null)}
+                                        onSend={(message, file) => handleSend(message, file)}
                                         showAttachments={true}
                                         showVoice={true}
                                         disabled={ui.isLoading}

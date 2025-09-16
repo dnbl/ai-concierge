@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "Asistente Aura AI",
+    "subtitle": "Tu Conserje de Vehículos IE",
+    "newChat": "Nueva Conversación"
+  },
+  "welcome": {
+    "title": "Bienvenido a Aura AI",
+    "subtitle": "Tu conserje inteligente de vehículos IE",
+    "howCanIHelp": "¿Cómo puedo ayudarte hoy?",
+    "helpText": "Puedo ayudar con gestión de flota, reservas de servicio, pruebas de manejo e información de vehículos. También puedes adjuntar archivos para compartir documentos o imágenes.",
+    "inputPlaceholder": "Pregúntame cualquier cosa sobre tus vehículos..."
+  },
+  "quickActions": {
+    "viewFleet": {
+      "title": "Ver Flota",
+      "description": "Ver tus vehículos actuales",
+      "action": "Muéstrame mi flota de vehículos"
+    },
+    "bookService": {
+      "title": "Reservar Servicio",
+      "description": "Programar mantenimiento",
+      "action": "Necesito reservar una cita de servicio"
+    },
+    "testDrive": {
+      "title": "Prueba de Manejo",
+      "description": "Programar una prueba de manejo",
+      "action": "Quiero programar una prueba de manejo"
+    },
+    "vehicleInfo": {
+      "title": "Info del Vehículo",
+      "description": "Obtener detalles del vehículo",
+      "action": "Cuéntame sobre mis vehículos"
+    }
+  },
+  "ui": {
+    "send": "Enviar mensaje",
+    "attachment": "Agregar adjunto",
+    "removeAttachment": "Quitar adjunto",
+    "voiceStart": "Iniciar grabación de voz",
+    "voiceStop": "Detener grabación de voz",
+    "recording": "Grabando...",
+    "loading": "Cargando...",
+    "skipToMain": "Saltar al contenido principal",
+    "skipToActions": "Saltar a acciones rápidas",
+    "required": "requerido",
+    "close": "Cerrar",
+    "retry": "Reintentar",
+    "refresh": "Actualizar Página",
+    "switchTheme": "Cambiar a tema {{theme}}"
+  },
+  "errors": {
+    "general": "Algo salió mal",
+    "unexpected": "Encontramos un error inesperado. Por favor intenta actualizar la página.",
+    "network": "Error de red. Por favor verifica tu conexión e intenta nuevamente.",
+    "attachment": "Error al subir adjunto. Por favor intenta nuevamente."
+  },
+  "success": {
+    "vehicleAdded": "Vehículo agregado exitosamente",
+    "serviceBooked": "Cita de servicio reservada exitosamente",
+    "testDriveScheduled": "Prueba de manejo programada exitosamente",
+    "attachmentUploaded": "Archivo adjuntado exitosamente"
+  },
+  "accessibility": {
+    "mainNavigation": "Navegación principal",
+    "messageInput": "Entrada de mensaje",
+    "attachmentPreview": "Vista previa del adjunto",
+    "actionButton": "{{title}}: {{description}}"
+  }
+}
