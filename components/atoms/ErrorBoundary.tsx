@@ -1,14 +1,20 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { AccessibleButton } from './AccessibilityEnhancements';
 
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  showBugReport?: boolean;
+  showHomeButton?: boolean;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onBugReport?: (error: Error, errorInfo: ErrorInfo) => void;
+  onGoHome?: () => void;
 }
 
 interface State {
   hasError: boolean;
   error?: Error;
+  errorInfo?: ErrorInfo;
 }
 
 class ErrorBoundary extends Component<Props, State> {
@@ -24,6 +30,8 @@ class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
     
+    this.setState({ errorInfo });
+    
     // Log to external service in production
     if (process.env.NODE_ENV === 'production') {
       // TODO: Implement error reporting service (Sentry, LogRocket, etc.)
@@ -31,12 +39,50 @@ class ErrorBoundary extends Component<Props, State> {
         error: error.message,
         stack: error.stack,
         componentStack: errorInfo.componentStack,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        url: window.location.href
       });
     }
     
     this.props.onError?.(error, errorInfo);
   }
+
+  handleBugReport = () => {
+    if (this.state.error && this.state.errorInfo) {
+      if (this.props.onBugReport) {
+        this.props.onBugReport(this.state.error, this.state.errorInfo);
+      } else {
+        // Default bug report behavior
+        const bugReportData = {
+          error: this.state.error.message,
+          stack: this.state.error.stack,
+          componentStack: this.state.errorInfo.componentStack,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          url: window.location.href
+        };
+        
+        // Copy to clipboard for now (in real app, this would send to bug tracker)
+        navigator.clipboard.writeText(JSON.stringify(bugReportData, null, 2))
+          .then(() => alert('Error details copied to clipboard'))
+          .catch(() => console.log('Failed to copy error details'));
+      }
+    }
+  };
+
+  handleGoHome = () => {
+    if (this.props.onGoHome) {
+      this.props.onGoHome();
+    } else {
+      // Default home navigation
+      window.location.href = '/';
+    }
+  };
+
+  handleRetry = () => {
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+  };
 
   render() {
     if (this.state.hasError) {
@@ -45,7 +91,7 @@ class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg border border-red-500/20">
+        <div className="flex flex-col items-center justify-center p-8 bg-theme-secondary rounded-lg border border-red-500/20 max-w-md mx-auto">
           <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
             <svg
               className="w-8 h-8 text-red-500"
@@ -61,18 +107,61 @@ class ErrorBoundary extends Component<Props, State> {
               />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-white mb-2">
+          <h3 className="text-lg font-semibold text-theme-primary mb-2">
             Something went wrong
           </h3>
-          <p className="text-gray-400 text-center mb-4">
-            We encountered an unexpected error. Please try refreshing the page.
+          <p className="text-theme-secondary text-center mb-6">
+            We encountered an unexpected error. Please try one of the options below.
           </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
-          >
-            Refresh Page
-          </button>
+          
+          <div className="flex flex-col gap-3 w-full">
+            <AccessibleButton
+              variant="primary"
+              onClick={this.handleRetry}
+              className="w-full"
+            >
+              Try Again
+            </AccessibleButton>
+            
+            <AccessibleButton
+              variant="secondary"
+              onClick={() => window.location.reload()}
+              className="w-full"
+            >
+              Refresh Page
+            </AccessibleButton>
+            
+            {this.props.showHomeButton !== false && (
+              <AccessibleButton
+                variant="ghost"
+                onClick={this.handleGoHome}
+                className="w-full"
+              >
+                Go Home
+              </AccessibleButton>
+            )}
+            
+            {this.props.showBugReport !== false && (
+              <AccessibleButton
+                variant="ghost"
+                onClick={this.handleBugReport}
+                className="w-full text-sm"
+              >
+                Report Bug
+              </AccessibleButton>
+            )}
+          </div>
+          
+          {process.env.NODE_ENV === 'development' && (
+            <details className="mt-4 w-full">
+              <summary className="cursor-pointer text-sm text-theme-tertiary hover:text-theme-secondary">
+                Error Details (Dev Mode)
+              </summary>
+              <pre className="mt-2 p-2 bg-theme-tertiary rounded text-xs text-theme-primary overflow-auto max-h-32">
+                {this.state.error?.stack}
+              </pre>
+            </details>
+          )}
         </div>
       );
     }

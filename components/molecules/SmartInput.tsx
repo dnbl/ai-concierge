@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { AccessibleInput, AccessibleButton } from '../atoms/AccessibilityEnhancements';
+import { usePerformanceMonitoring } from '../../hooks/usePerformanceOptimization';
 
 interface SmartInputProps {
   placeholder?: string;
@@ -31,6 +32,9 @@ const SmartInput: React.FC<SmartInputProps> = ({
   const [currentAttachment, setCurrentAttachment] = useState<File | null>(attachment);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Performance monitoring
+  usePerformanceMonitoring('SmartInput');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

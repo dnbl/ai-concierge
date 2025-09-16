@@ -1,29 +1,24 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+// Simple mock for tests - just exports an empty object with required methods
+const mockI18n = {
+  use: () => mockI18n,
+  init: () => Promise.resolve(),
+  t: (key: string) => key,
+  language: 'en',
+  languages: ['en'],
+  changeLanguage: () => Promise.resolve()
+};
 
-// Mock i18n for tests
-i18n
-  .use(initReactI18next)
-  .init({
-    lng: 'en',
-    fallbackLng: 'en',
-    debug: false,
-    interpolation: {
-      escapeValue: false,
-    },
-    resources: {
-      en: {
-        translation: {
-          // Simple mock translations for tests
-          'app.title': 'Aura AI Assistant',
-          'welcome.title': 'Welcome to Aura AI',
-          'ui.send': 'Send message',
-          'ui.attachment': 'Add attachment',
-          'errors.general': 'Something went wrong',
-        }
-      }
-    },
-    react: {
-      useSuspense: false
-    }
-  });
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: mockI18n
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: () => {}
+  }
+}));
+
+// Mock i18next
+jest.mock('i18next', () => mockI18n);

@@ -20,5 +20,11 @@
     "store/**/*.{ts,tsx}",
     "!**/*.d.ts",
     "!**/*.stories.{ts,tsx}"
-  ]
+  ],
+  "extensionsToTreatAsEsm": [".ts", ".tsx"],
+  "globals": {
+    "ts-jest": {
+      "useESM": true
+    }
+  }
 }
