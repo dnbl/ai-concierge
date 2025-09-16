@@ -220,7 +220,7 @@ export const useImageLazyLoading = (src: string, placeholder?: string) => {
 // Batch State Updates Hook
 export const useBatchStateUpdates = () => {
   const [updates, setUpdates] = useState<(() => void)[]>([]);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<number>();
 
   const batchUpdate = useCallback((update: () => void) => {
     setUpdates(prev => [...prev, update]);
@@ -229,7 +229,7 @@ export const useBatchStateUpdates = () => {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       updates.forEach(update => update());
       setUpdates([]);
     }, 0);

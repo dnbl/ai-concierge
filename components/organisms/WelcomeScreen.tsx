@@ -1,5 +1,20 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import SmartInput from '../molecules/SmartInput';
+import PersonalizedGreeting from '../atoms/PersonalizedGreeting';
+import AccessibleButton from '../atoms/AccessibleButton';
+import { usePerformanceMonitoring } from '../../hooks/usePerformanceOptimization';
+import { useI18n } from '../../hooks/useI18n';
+import { useAppStore } from '../../store/useAppStore';
+import { useToast } from '../atoms/Toast';
+
+interface QuickAction {
+  id: string;
+  title: string;
+  description: string;
+  action: string;
+  icon: string;
+  context?: 'fleet' | 'service' | 'booking' | 'general';
+}
 
 interface WelcomeScreenProps {
   onActionClick: (action: string) => void;
@@ -18,75 +33,150 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onAttachmentClick,
   className = ''
 }) => {
-  const quickActions = [
+  // Performance monitoring
+  usePerformanceMonitoring('WelcomeScreen');
+  
+  // Internationalization
+  const { t } = useI18n();
+  
+  // Store access
+  const { fleet, ui, toggleTheme } = useAppStore();
+  
+  // Toast notifications
+  const { showContextualToast } = useToast();
+
+  const quickActions: QuickAction[] = useMemo(() => [
     {
-      title: "View Fleet",
-      description: "See your current vehicles",
+      id: 'fleet',
+      title: t('fleet.title'),
+      description: t('fleet.noVehicles'),
       action: "Show me my vehicle fleet",
-      icon: "🚗"
+      icon: "🚗",
+      context: 'fleet'
     },
     {
-      title: "Book Service",
-      description: "Schedule maintenance",
+      id: 'service',
+      title: t('services.book'),
+      description: t('services.title'),
       action: "I need to book a service appointment",
-      icon: "🔧"
+      icon: "🔧",
+      context: 'service'
     },
     {
-      title: "Test Drive",
+      id: 'testdrive',
+      title: t('fleet.testDrive'),
       description: "Schedule a test drive",
       action: "I want to schedule a test drive",
-      icon: "⚡"
+      icon: "⚡",
+      context: 'booking'
     },
     {
-      title: "Vehicle Info",
-      description: "Get vehicle details",
+      id: 'info',
+      title: t('fleet.vehicleInfo'),
+      description: t('fleet.viewDetails'),
       action: "Tell me about my vehicles",
-      icon: "📋"
+      icon: "📋",
+      context: 'general'
     }
-  ];
+  ], [t]);
+
+  const handleActionClick = (action: QuickAction) => {
+    // Show contextual toast
+    showContextualToast(
+      action.context || 'general',
+      'info',
+      `${action.title} selected`,
+      `Processing your request for ${action.description.toLowerCase()}...`
+    );
+    
+    onActionClick(action.action);
+  };
+
+  const fleetContext = useMemo(() => ({
+    vehicleCount: fleet.length,
+    upcomingServices: 1, // This could come from actual data
+    preferredDealer: 'Infinity East'
+  }), [fleet.length]);
 
   return (
-    <div className={`flex-1 flex flex-col justify-center items-center px-4 py-8 ${className}`}>
+    <div 
+      className={`flex-1 flex flex-col justify-center items-center px-4 py-8 ${className}`}
+      role="main"
+      aria-label="Welcome screen"
+    >
       <div className="w-full max-w-2xl mx-auto text-center">
-        {/* Welcome Message */}
-        <div className="mb-12">
+        {/* Brand Identity */}
+        <div className="mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-white font-bold text-2xl">IE</span>
+            <span className="text-white font-bold text-2xl" aria-label="IE logo">IE</span>
           </div>
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Welcome to Aura AI
-          </h1>
+          
+          {/* Personalized Greeting */}
+          <PersonalizedGreeting
+            showTimeBased={true}
+            showLastVisit={false}
+            context={fleetContext}
+            className="mb-4"
+          />
+          
           <p className="text-xl text-gray-300 mb-2">
-            Your intelligent IE Vehicle Concierge
+            {t('greeting.newUser')}
           </p>
           <p className="text-gray-400">
             How can I help you today?
           </p>
         </div>
 
+        {/* Theme Toggle Button */}
+        <div className="mb-8 flex justify-center">
+          <AccessibleButton
+            onClick={toggleTheme}
+            variant="ghost"
+            size="sm"
+            ariaLabel={`Switch to ${ui.theme === 'dark' ? 'light' : 'dark'} theme`}
+            className="flex items-center gap-2"
+          >
+            {ui.theme === 'dark' ? '☀️' : '🌙'}
+            {ui.theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          </AccessibleButton>
+        </div>
+
         {/* Quick Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-          {quickActions.map((action, index) => (
-            <button
-              key={index}
-              onClick={() => onActionClick(action.action)}
-              className="p-6 text-left border border-gray-700 rounded-xl hover:border-gray-600 hover:shadow-lg transition-all duration-200 bg-gray-800"
+        <div 
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"
+          role="group"
+          aria-label="Quick actions"
+        >
+          {quickActions.map((action) => (
+            <AccessibleButton
+              key={action.id}
+              onClick={() => handleActionClick(action)}
+              variant="ghost"
+              className="p-6 text-left border border-gray-700 rounded-xl hover:border-gray-600 hover:shadow-lg transition-all duration-200 bg-gray-800 h-auto"
+              ariaLabel={`${action.title}: ${action.description}`}
+              testId={`quick-action-${action.id}`}
             >
               <div className="flex items-start gap-4">
-                <div className="text-2xl">{action.icon}</div>
-                <div>
+                <div 
+                  className="text-2xl" 
+                  role="img" 
+                  aria-label={action.title}
+                >
+                  {action.icon}
+                </div>
+                <div className="text-left">
                   <h3 className="font-semibold text-white mb-1">{action.title}</h3>
                   <p className="text-sm text-gray-400">{action.description}</p>
                 </div>
               </div>
-            </button>
+            </AccessibleButton>
           ))}
         </div>
 
         {/* Input Section */}
         <div className="mb-8">
           <SmartInput
-            placeholder="Ask me anything about your vehicles..."
+            placeholder={t('chat.placeholder')}
             onSend={onSendMessage}
             onVoiceStart={onVoiceStart}
             onVoiceEnd={onVoiceEnd}
@@ -102,6 +192,14 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           <p className="text-sm text-gray-400">
             I can help with fleet management, service bookings, test drives, and vehicle information.
           </p>
+          
+          {/* Skip to main content link for screen readers */}
+          <a 
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-cyan-600 text-white px-4 py-2 rounded-md z-50"
+          >
+            Skip to main content
+          </a>
         </div>
       </div>
     </div>
