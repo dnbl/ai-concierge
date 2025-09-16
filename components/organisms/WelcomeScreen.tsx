@@ -3,7 +3,7 @@ import SmartInput from '../molecules/SmartInput';
 
 interface WelcomeScreenProps {
   onActionClick: (action: string) => void;
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, file?: File | null) => void;
   onVoiceStart?: () => void;
   onVoiceEnd?: (transcript: string) => void;
   onAttachmentClick?: () => void;
@@ -94,6 +94,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             showAttachments={true}
             showVoice={true}
             className="w-full"
+            acceptedFileTypes="image/*,.pdf,.doc,.docx,.txt"
+            maxFileSize={10}
           />
         </div>
 
