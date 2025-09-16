@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '../atoms/Card';
 import Badge from '../atoms/Badge';
 import Icon from '../atoms/Icon';
+import { AccessibleButton } from '../atoms/AccessibilityEnhancements';
 import { Vehicle } from '../../types';
 
 export interface VehicleCardProps {
@@ -64,24 +65,30 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         
         {showActions && (
           <div className="flex flex-col gap-2">
-            <button
+            <AccessibleButton
               onClick={(e) => {
                 e.stopPropagation();
                 onViewDetails?.();
               }}
+              variant="ghost"
+              size="sm"
               className="text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
+              aria-label={`View details for ${vehicle.model}`}
             >
               View Details
-            </button>
-            <button
+            </AccessibleButton>
+            <AccessibleButton
               onClick={(e) => {
                 e.stopPropagation();
                 onBookService?.();
               }}
+              variant="ghost"
+              size="sm"
               className="text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
+              aria-label={`Book service for ${vehicle.model}`}
             >
               Book Service
-            </button>
+            </AccessibleButton>
           </div>
         )}
       </div>
