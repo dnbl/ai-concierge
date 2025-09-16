@@ -1,0 +1,131 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "retry": "Retry"
+  },
+  "navigation": {
+    "skipToMain": "Skip to main content",
+    "skipToNavigation": "Skip to navigation",
+    "skipToChatInput": "Skip to chat input",
+    "newChat": "New Chat",
+    "goHome": "Go Home"
+  },
+  "welcome": {
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "title": "Welcome to Aura AI",
+    "subtitle": "Your intelligent IE Vehicle Concierge",
+    "question": "How can I help you today?",
+    "recentActivities": "I see you've been working with {{activities}}. How can I help you today?",
+    "helpText": "I can help with fleet management, service bookings, test drives, and vehicle information.",
+    "preferences": "Based on your preferences: {{services}}"
+  },
+  "actions": {
+    "viewFleet": {
+      "title": "View Fleet",
+      "description": "See your current vehicles",
+      "action": "Show me my vehicle fleet"
+    },
+    "bookService": {
+      "title": "Book Service",
+      "description": "Schedule maintenance",
+      "action": "I need to book a service appointment"
+    },
+    "testDrive": {
+      "title": "Test Drive",
+      "description": "Schedule a test drive",
+      "action": "I want to schedule a test drive"
+    },
+    "vehicleInfo": {
+      "title": "Vehicle Info",
+      "description": "Get vehicle details",
+      "action": "Tell me about my vehicles"
+    },
+    "recentService": {
+      "title": "Recent Service",
+      "description": "Check your last service",
+      "action": "Show me my recent service history"
+    },
+    "maintenance": {
+      "title": "Maintenance Schedule",
+      "description": "View upcoming maintenance",
+      "action": "When is my next maintenance due?"
+    }
+  },
+  "chat": {
+    "placeholder": "Message Aura AI...",
+    "welcomePlaceholder": "Ask me anything about your vehicles...",
+    "attachment": "Add attachment",
+    "voice": "Voice recording",
+    "send": "Send message",
+    "startRecording": "Start voice recording",
+    "stopRecording": "Stop voice recording",
+    "recording": "Recording..."
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode"
+  },
+  "toast": {
+    "fileAttached": "File Attached",
+    "fileAttachedMessage": "{{fileName}} has been uploaded and will be analyzed.",
+    "messageFailed": "Message Failed",
+    "messageFailedMessage": "Unable to send your message. Please check your connection and try again.",
+    "vehicleAdded": "Vehicle Added",
+    "vehicleAddedMessage": "{{model}} ({{vin}}) has been added to your fleet.",
+    "newChatCreated": "New Chat",
+    "newChatMessage": "Chat history has been cleared.",
+    "performanceWarning": "Performance Warning",
+    "performanceWarningMessage": "{{metric}} is performing poorly: {{value}}ms"
+  },
+  "error": {
+    "title": "Oops! Something went wrong",
+    "subtitle": "We encountered an unexpected error. This is likely a temporary issue.",
+    "tryAgain": "Try Again",
+    "reloadPage": "Reload Page",
+    "goHome": "Go Home",
+    "reportBug": "Report Bug",
+    "reporting": "Reporting...",
+    "errorDetails": "Error Details",
+    "helpText": "If this problem persists, please contact support with the error details above.",
+    "tryAgainDescription": "Try again to recover from the error",
+    "reloadDescription": "Reload the page to start fresh",
+    "goHomeDescription": "Go back to the home page",
+    "reportBugDescription": "Report this error to help us fix it"
+  },
+  "accessibility": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleNavigation": "Toggle navigation",
+    "currentPage": "Current page",
+    "loading": "Loading content",
+    "error": "Error message",
+    "success": "Success message",
+    "warning": "Warning message",
+    "info": "Information message"
+  },
+  "language": {
+    "select": "Select Language",
+    "current": "Current Language",
+    "english": "English",
+    "spanish": "Español",
+    "french": "Français",
+    "german": "Deutsch"
+  }
+}

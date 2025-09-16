@@ -1,0 +1,131 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "submit": "Soumettre",
+    "retry": "Réessayer"
+  },
+  "navigation": {
+    "skipToMain": "Aller au contenu principal",
+    "skipToNavigation": "Aller à la navigation",
+    "skipToChatInput": "Aller à l'entrée de chat",
+    "newChat": "Nouveau Chat",
+    "goHome": "Aller à l'Accueil"
+  },
+  "welcome": {
+    "greeting": {
+      "morning": "Bonjour",
+      "afternoon": "Bon après-midi",
+      "evening": "Bonsoir"
+    },
+    "title": "Bienvenue à Aura AI",
+    "subtitle": "Votre Concierge Intelligent de Véhicules IE",
+    "question": "Comment puis-je vous aider aujourd'hui ?",
+    "recentActivities": "Je vois que vous avez travaillé avec {{activities}}. Comment puis-je vous aider aujourd'hui ?",
+    "helpText": "Je peux aider avec la gestion de flotte, les réservations de service, les essais routiers et les informations sur les véhicules.",
+    "preferences": "Basé sur vos préférences : {{services}}"
+  },
+  "actions": {
+    "viewFleet": {
+      "title": "Voir la Flotte",
+      "description": "Voir vos véhicules actuels",
+      "action": "Montrez-moi ma flotte de véhicules"
+    },
+    "bookService": {
+      "title": "Réserver un Service",
+      "description": "Programmer la maintenance",
+      "action": "J'ai besoin de réserver un rendez-vous de service"
+    },
+    "testDrive": {
+      "title": "Essai Routier",
+      "description": "Programmer un essai routier",
+      "action": "Je veux programmer un essai routier"
+    },
+    "vehicleInfo": {
+      "title": "Info Véhicule",
+      "description": "Obtenir les détails du véhicule",
+      "action": "Parlez-moi de mes véhicules"
+    },
+    "recentService": {
+      "title": "Service Récent",
+      "description": "Vérifier votre dernier service",
+      "action": "Montrez-moi mon historique de service récent"
+    },
+    "maintenance": {
+      "title": "Calendrier de Maintenance",
+      "description": "Voir la prochaine maintenance",
+      "action": "Quand est ma prochaine maintenance ?"
+    }
+  },
+  "chat": {
+    "placeholder": "Message à Aura AI...",
+    "welcomePlaceholder": "Demandez-moi n'importe quoi sur vos véhicules...",
+    "attachment": "Ajouter une pièce jointe",
+    "voice": "Enregistrement vocal",
+    "send": "Envoyer le message",
+    "startRecording": "Commencer l'enregistrement vocal",
+    "stopRecording": "Arrêter l'enregistrement vocal",
+    "recording": "Enregistrement..."
+  },
+  "theme": {
+    "toggle": "Basculer le thème",
+    "switchToLight": "Passer au thème clair",
+    "switchToDark": "Passer au thème sombre",
+    "lightMode": "Mode Clair",
+    "darkMode": "Mode Sombre"
+  },
+  "toast": {
+    "fileAttached": "Fichier Joint",
+    "fileAttachedMessage": "{{fileName}} a été téléchargé et sera analysé.",
+    "messageFailed": "Message Échoué",
+    "messageFailedMessage": "Impossible d'envoyer votre message. Veuillez vérifier votre connexion et réessayer.",
+    "vehicleAdded": "Véhicule Ajouté",
+    "vehicleAddedMessage": "{{model}} ({{vin}}) a été ajouté à votre flotte.",
+    "newChatCreated": "Nouveau Chat",
+    "newChatMessage": "L'historique du chat a été effacé.",
+    "performanceWarning": "Avertissement de Performance",
+    "performanceWarningMessage": "{{metric}} fonctionne mal : {{value}}ms"
+  },
+  "error": {
+    "title": "Oups ! Quelque chose a mal tourné",
+    "subtitle": "Nous avons rencontré une erreur inattendue. C'est probablement un problème temporaire.",
+    "tryAgain": "Réessayer",
+    "reloadPage": "Recharger la Page",
+    "goHome": "Aller à l'Accueil",
+    "reportBug": "Signaler un Bug",
+    "reporting": "Signalement...",
+    "errorDetails": "Détails de l'Erreur",
+    "helpText": "Si ce problème persiste, veuillez contacter le support avec les détails de l'erreur ci-dessus.",
+    "tryAgainDescription": "Réessayez pour récupérer de l'erreur",
+    "reloadDescription": "Rechargez la page pour recommencer",
+    "goHomeDescription": "Retournez à la page d'accueil",
+    "reportBugDescription": "Signalez cette erreur pour nous aider à la corriger"
+  },
+  "accessibility": {
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "toggleNavigation": "Basculer la navigation",
+    "currentPage": "Page actuelle",
+    "loading": "Chargement du contenu",
+    "error": "Message d'erreur",
+    "success": "Message de succès",
+    "warning": "Message d'avertissement",
+    "info": "Message d'information"
+  },
+  "language": {
+    "select": "Sélectionner la Langue",
+    "current": "Langue Actuelle",
+    "english": "English",
+    "spanish": "Español",
+    "french": "Français",
+    "german": "Deutsch"
+  }
+}
