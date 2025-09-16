@@ -6,8 +6,8 @@ import ChatWindow from './components/ChatWindow';
 import SmartInput from './components/molecules/SmartInput';
 import ImageViewerModal from './components/ImageViewerModal';
 import { ENHANCED_VEHICLE_DETAILS, ENHANCED_SERVICE_HISTORY, ENHANCED_DEALERS } from './data/enhancedMockData';
-import LoadingSpinner from './components/atoms/LoadingSpinner';
-import { useAppStore } from './store/useAppStore';
+import { SpinnerLoader } from './components/atoms/LoadingStates';
+import { useAppStore, useHasActiveRequests } from './store/useAppStore';
 import { ToastProvider } from './components/atoms/Toast';
 import ErrorBoundary from './components/atoms/ErrorBoundary';
 import WelcomeScreen from './components/organisms/WelcomeScreen';
@@ -35,8 +35,14 @@ const App: React.FC = () => {
         setServiceHistory,
         setLoading,
         clearMessages,
-        clearAll
+        clearAll,
+        addActiveRequest,
+        removeActiveRequest,
+        cancelAllRequests
     } = useAppStore();
+
+    // Check if there are active requests
+    const hasActiveRequests = useHasActiveRequests();
 
     // Local state for UI interactions
     const [attachment, setAttachment] = useState<File | null>(null);
@@ -86,6 +92,17 @@ const App: React.FC = () => {
         addMessage(userMessage);
         addMessage(loadingMessage);
 
+        // Create AbortController for this request
+        const abortController = new AbortController();
+        const requestId = `request_${Date.now()}_${Math.random()}`;
+        
+        // Track this request
+        addActiveRequest({
+            id: requestId,
+            messageId: agentMessageId,
+            abortController
+        });
+
         let attachmentData: { data: string; mimeType: string } | undefined;
         if (file) {
             const base64 = await toBase64(file) as string;
@@ -95,14 +112,25 @@ const App: React.FC = () => {
             };
         }
         
-        const historyForAPI = [...messages, userMessage];
-        const response = await sendMessageToGemini(prompt, historyForAPI, attachmentData);
+        try {
+            const historyForAPI = [...messages, userMessage];
+            const response = await sendMessageToGemini(prompt, historyForAPI, attachmentData, abortController);
 
-        // Update the loading message with the actual response
-        updateMessage(agentMessageId, response);
-        
-        setLoading(false);
-        setAttachment(null);
+            // Update the loading message with the actual response
+            updateMessage(agentMessageId, response);
+        } catch (error) {
+            // Handle cancellation or other errors
+            const errorMessage = error instanceof Error ? error.message : 'An error occurred';
+            updateMessage(agentMessageId, {
+                text: '',
+                error: errorMessage
+            });
+        } finally {
+            // Clean up this request
+            removeActiveRequest(requestId);
+            setLoading(false);
+            setAttachment(null);
+        }
     };
 
     const handleRetry = () => {
@@ -141,12 +169,25 @@ const App: React.FC = () => {
                                     <p className="text-sm text-gray-400">Your IE Vehicle Concierge</p>
                                 </div>
                             </div>
-                            <button 
-                                onClick={clearAll}
-                                className="text-sm text-gray-400 hover:text-white px-3 py-1 rounded-md hover:bg-gray-800 transition-colors"
-                            >
-                                New Chat
-                            </button>
+                            <div className="flex items-center gap-2">
+                                {hasActiveRequests && (
+                                    <button 
+                                        onClick={cancelAllRequests}
+                                        className="text-sm text-red-400 hover:text-red-300 px-3 py-1 rounded-md hover:bg-red-900/20 transition-colors flex items-center gap-1"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        Cancel All
+                                    </button>
+                                )}
+                                <button 
+                                    onClick={clearAll}
+                                    className="text-sm text-gray-400 hover:text-white px-3 py-1 rounded-md hover:bg-gray-800 transition-colors"
+                                >
+                                    New Chat
+                                </button>
+                            </div>
                         </div>
                     </header>
 

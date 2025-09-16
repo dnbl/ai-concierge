@@ -10,6 +10,13 @@ interface UIState {
   notifications: boolean;
 }
 
+interface ActiveRequest {
+  id: string;
+  messageId: string;
+  abortController?: AbortController;
+  timeoutId?: number;
+}
+
 interface AppState {
   // Messages
   messages: Message[];
@@ -26,6 +33,9 @@ interface AppState {
   
   // UI State
   ui: UIState;
+  
+  // Active Requests
+  activeRequests: ActiveRequest[];
   
   // Actions
   addMessage: (message: Message) => void;
@@ -46,6 +56,11 @@ interface AppState {
   toggleSidebar: () => void;
   setNotifications: (enabled: boolean) => void;
   
+  // Request Management Actions
+  addActiveRequest: (request: ActiveRequest) => void;
+  removeActiveRequest: (id: string) => void;
+  cancelAllRequests: () => void;
+  
   // Data Actions
   setDealers: (dealers: Dealer[]) => void;
   setVehicleDetails: (vin: string, details: VehicleDetails) => void;
@@ -64,6 +79,7 @@ export const useAppStore = create<AppState>()(
       dealers: [],
       vehicleDetails: {},
       serviceHistory: {},
+      activeRequests: [],
       ui: {
         isLoading: false,
         currentView: 'chat',
@@ -142,6 +158,35 @@ export const useAppStore = create<AppState>()(
           ui: { ...state.ui, notifications: enabled },
         })),
       
+      // Request Management Actions
+      addActiveRequest: (request: ActiveRequest) =>
+        set((state) => ({
+          activeRequests: [...state.activeRequests, request],
+        })),
+      
+      removeActiveRequest: (id: string) =>
+        set((state) => ({
+          activeRequests: state.activeRequests.filter(req => req.id !== id),
+        })),
+      
+      cancelAllRequests: () => {
+        const state = get();
+        // Cancel all active requests
+        state.activeRequests.forEach(request => {
+          if (request.abortController) {
+            request.abortController.abort();
+          }
+          if (request.timeoutId) {
+            clearTimeout(request.timeoutId);
+          }
+        });
+        // Clear the activeRequests array and stop loading
+        set({ 
+          activeRequests: [],
+          ui: { ...state.ui, isLoading: false }
+        });
+      },
+      
       // Data Actions
       setDealers: (dealers: Dealer[]) =>
         set({ dealers }),
@@ -157,11 +202,22 @@ export const useAppStore = create<AppState>()(
         })),
 
       // Clear all data (useful for debugging)
-      clearAll: () =>
+      clearAll: () => {
+        const state = get();
+        // Cancel any active requests first
+        state.activeRequests.forEach(request => {
+          if (request.abortController) {
+            request.abortController.abort();
+          }
+          if (request.timeoutId) {
+            clearTimeout(request.timeoutId);
+          }
+        });
         set({
           messages: [],
           currentMessage: '',
           selectedVehicle: null,
+          activeRequests: [],
           ui: {
             isLoading: false,
             currentView: 'chat',
@@ -169,7 +225,8 @@ export const useAppStore = create<AppState>()(
             sidebarOpen: false,
             notifications: true,
           },
-        }),
+        });
+      },
     }),
     {
       name: 'ie-concierge-storage',
@@ -193,3 +250,5 @@ export const useSelectedVehicle = () => useAppStore((state) => state.selectedVeh
 export const useUI = () => useAppStore((state) => state.ui);
 export const useIsLoading = () => useAppStore((state) => state.ui.isLoading);
 export const useTheme = () => useAppStore((state) => state.ui.theme);
+export const useActiveRequests = () => useAppStore((state) => state.activeRequests);
+export const useHasActiveRequests = () => useAppStore((state) => state.activeRequests.length > 0);

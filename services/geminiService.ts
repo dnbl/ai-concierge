@@ -439,14 +439,46 @@ Each vehicle is equipped with our latest technology and is ready for your next a
     return getMockResponse(prompt);
 };
 
-// Simulate API delay with realistic variation
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// Simulate API delay with realistic variation that can be cancelled
+const delay = (ms: number, abortController?: AbortController): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+            if (abortController?.signal.aborted) {
+                reject(new Error('Request cancelled'));
+            } else {
+                resolve();
+            }
+        }, ms);
+        
+        if (abortController) {
+            abortController.signal.addEventListener('abort', () => {
+                clearTimeout(timeoutId);
+                reject(new Error('Request cancelled'));
+            });
+        }
+    });
+};
 
-export const sendMessageToGemini = async (prompt: string, history: Message[], attachment?: { data: string; mimeType: string }): Promise<Message> => {
+export const sendMessageToGemini = async (
+    prompt: string, 
+    history: Message[], 
+    attachment?: { data: string; mimeType: string },
+    abortController?: AbortController
+): Promise<Message> => {
     try {
+        // Check if already cancelled
+        if (abortController?.signal.aborted) {
+            throw new Error('Request cancelled');
+        }
+        
         // Simulate realistic API call delay (500ms - 2s)
         const delayTime = 500 + Math.random() * 1500;
-        await delay(delayTime);
+        await delay(delayTime, abortController);
+        
+        // Check again after delay
+        if (abortController?.signal.aborted) {
+            throw new Error('Request cancelled');
+        }
         
         // Use contextual response for more sophisticated AI behavior
         const response = getContextualResponse(prompt, history);
@@ -468,6 +500,17 @@ export const sendMessageToGemini = async (prompt: string, history: Message[], at
     } catch (e) {
         console.error(e);
         const error = e as Error;
+        
+        // Handle cancellation
+        if (error.message === 'Request cancelled') {
+            return {
+                id: Date.now().toString(),
+                sender: 'agent',
+                text: '',
+                error: 'Request was cancelled',
+            };
+        }
+        
         return {
             id: Date.now().toString(),
             sender: 'agent',
