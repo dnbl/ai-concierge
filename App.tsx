@@ -6,7 +6,7 @@ import ChatWindow from './components/ChatWindow';
 import SmartInput from './components/molecules/SmartInput';
 import ImageViewerModal from './components/ImageViewerModal';
 import { ENHANCED_VEHICLE_DETAILS, ENHANCED_SERVICE_HISTORY, ENHANCED_DEALERS } from './data/enhancedMockData';
-import LoadingSpinner from './components/atoms/LoadingSpinner';
+import { SpinnerLoader as LoadingSpinner } from './components/atoms/LoadingStates';
 import { useAppStore } from './store/useAppStore';
 import { ToastProvider } from './components/atoms/Toast';
 import ErrorBoundary from './components/atoms/ErrorBoundary';
