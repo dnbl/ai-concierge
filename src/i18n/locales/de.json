@@ -1,0 +1,131 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "submit": "Übermitteln",
+    "retry": "Wiederholen"
+  },
+  "navigation": {
+    "skipToMain": "Zum Hauptinhalt springen",
+    "skipToNavigation": "Zur Navigation springen",
+    "skipToChatInput": "Zum Chat-Eingabefeld springen",
+    "newChat": "Neuer Chat",
+    "goHome": "Zur Startseite"
+  },
+  "welcome": {
+    "greeting": {
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Tag",
+      "evening": "Guten Abend"
+    },
+    "title": "Willkommen bei Aura AI",
+    "subtitle": "Ihr intelligenter IE Fahrzeug-Concierge",
+    "question": "Wie kann ich Ihnen heute helfen?",
+    "recentActivities": "Ich sehe, Sie haben mit {{activities}} gearbeitet. Wie kann ich Ihnen heute helfen?",
+    "helpText": "Ich kann bei Flottenmanagement, Servicebuchungen, Probefahrten und Fahrzeuginformationen helfen.",
+    "preferences": "Basierend auf Ihren Präferenzen: {{services}}"
+  },
+  "actions": {
+    "viewFleet": {
+      "title": "Flotte Anzeigen",
+      "description": "Ihre aktuellen Fahrzeuge anzeigen",
+      "action": "Zeigen Sie mir meine Fahrzeugflotte"
+    },
+    "bookService": {
+      "title": "Service Buchen",
+      "description": "Wartung planen",
+      "action": "Ich muss einen Servicetermin buchen"
+    },
+    "testDrive": {
+      "title": "Probefahrt",
+      "description": "Probefahrt planen",
+      "action": "Ich möchte eine Probefahrt planen"
+    },
+    "vehicleInfo": {
+      "title": "Fahrzeug-Info",
+      "description": "Fahrzeugdetails abrufen",
+      "action": "Erzählen Sie mir von meinen Fahrzeugen"
+    },
+    "recentService": {
+      "title": "Letzter Service",
+      "description": "Ihren letzten Service überprüfen",
+      "action": "Zeigen Sie mir meine letzte Servicehistorie"
+    },
+    "maintenance": {
+      "title": "Wartungsplan",
+      "description": "Nächste Wartung anzeigen",
+      "action": "Wann ist meine nächste Wartung fällig?"
+    }
+  },
+  "chat": {
+    "placeholder": "Nachricht an Aura AI...",
+    "welcomePlaceholder": "Fragen Sie mich alles über Ihre Fahrzeuge...",
+    "attachment": "Anhang hinzufügen",
+    "voice": "Sprachaufnahme",
+    "send": "Nachricht senden",
+    "startRecording": "Sprachaufnahme starten",
+    "stopRecording": "Sprachaufnahme stoppen",
+    "recording": "Aufnahme..."
+  },
+  "theme": {
+    "toggle": "Design wechseln",
+    "switchToLight": "Zu hellem Design wechseln",
+    "switchToDark": "Zu dunklem Design wechseln",
+    "lightMode": "Heller Modus",
+    "darkMode": "Dunkler Modus"
+  },
+  "toast": {
+    "fileAttached": "Datei Angehängt",
+    "fileAttachedMessage": "{{fileName}} wurde hochgeladen und wird analysiert.",
+    "messageFailed": "Nachricht Fehlgeschlagen",
+    "messageFailedMessage": "Ihre Nachricht konnte nicht gesendet werden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    "vehicleAdded": "Fahrzeug Hinzugefügt",
+    "vehicleAddedMessage": "{{model}} ({{vin}}) wurde zu Ihrer Flotte hinzugefügt.",
+    "newChatCreated": "Neuer Chat",
+    "newChatMessage": "Chat-Verlauf wurde gelöscht.",
+    "performanceWarning": "Leistungswarnung",
+    "performanceWarningMessage": "{{metric}} arbeitet schlecht: {{value}}ms"
+  },
+  "error": {
+    "title": "Hoppla! Etwas ist schiefgelaufen",
+    "subtitle": "Wir sind auf einen unerwarteten Fehler gestoßen. Dies ist wahrscheinlich ein vorübergehendes Problem.",
+    "tryAgain": "Erneut Versuchen",
+    "reloadPage": "Seite Neu Laden",
+    "goHome": "Zur Startseite",
+    "reportBug": "Fehler Melden",
+    "reporting": "Meldung...",
+    "errorDetails": "Fehlerdetails",
+    "helpText": "Wenn dieses Problem weiterhin besteht, wenden Sie sich bitte mit den obigen Fehlerdetails an den Support.",
+    "tryAgainDescription": "Versuchen Sie es erneut, um sich vom Fehler zu erholen",
+    "reloadDescription": "Laden Sie die Seite neu, um neu zu starten",
+    "goHomeDescription": "Zurück zur Startseite",
+    "reportBugDescription": "Melden Sie diesen Fehler, um uns bei der Behebung zu helfen"
+  },
+  "accessibility": {
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "toggleNavigation": "Navigation umschalten",
+    "currentPage": "Aktuelle Seite",
+    "loading": "Inhalt wird geladen",
+    "error": "Fehlermeldung",
+    "success": "Erfolgsmeldung",
+    "warning": "Warnmeldung",
+    "info": "Informationsmeldung"
+  },
+  "language": {
+    "select": "Sprache Auswählen",
+    "current": "Aktuelle Sprache",
+    "english": "English",
+    "spanish": "Español",
+    "french": "Français",
+    "german": "Deutsch"
+  }
+}

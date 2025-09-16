@@ -212,6 +212,11 @@ const AppContent: React.FC = () => {
                         onSendMessage={(message, file) => handleSend(message, file)}
                         onAttachmentClick={() => setAttachment(null)}
                         className="flex-1"
+                        userProfile={{
+                            name: "Sarah", // Mock user name
+                            recentActions: ["service", "fleet"],
+                            preferredServices: ["maintenance", "diagnostics"]
+                        }}
                     />
                 ) : (
                     <>
