@@ -9,11 +9,14 @@ This document outlines the comprehensive component library for the IE Vehicle Co
 ### **Atoms** - Basic building blocks
 - **PersonalizedGreeting** - Time-aware, personalized greeting component
 - **QuickActionButton** - Interactive action button with icon and description
-- **AccessibleButton** - Enhanced button with full accessibility support
-- **AccessibleInput** - Form input with validation and accessibility features
+- **AccessibleButton** - Enhanced button with full accessibility support (ARIA, keyboard navigation, focus management)
+- **AccessibleInput** - Form input with validation and accessibility features (proper labeling, error states)
+- **SkipLink** - Navigation aid for keyboard users to jump to main content
+- **ScreenReaderOnly** - Content visible only to screen readers
 - **LoadingStates** - Various loading indicators (skeleton, spinner, progress)
 - **Toast** - Notification system with priority levels
 - **ErrorBoundary** - Error catching and recovery component
+- **AccessibilityDemo** - Demonstrates high contrast and reduced motion features
 
 ### **Molecules** - Simple combinations of atoms
 - **QuickActionGrid** - Grid layout for action buttons (2-4 columns)
@@ -219,13 +222,13 @@ interface SmartInputProps {
 }
 ```
 
-**Features:**
-- Text input with send functionality
-- Voice recording capability
-- File attachment support
-- Keyboard navigation
-- Loading states
-- Accessibility features
+**Enhanced Accessibility Features:**
+- **AccessibleButton components** for all interactive elements
+- **ARIA labels** for attachment, voice, and send buttons
+- **Screen reader announcements** for voice recording state
+- **Keyboard navigation** with proper focus management
+- **Form semantics** with search role and proper labeling
+- **Helper text** for screen readers with usage instructions
 
 **Usage:**
 ```tsx
@@ -240,6 +243,13 @@ interface SmartInputProps {
 />
 ```
 
+**Accessibility Features:**
+- All buttons use AccessibleButton component
+- Voice recording state announced to screen readers
+- ARIA pressed state for voice button
+- Descriptive labels for all interactive elements
+- Helper text for screen reader users
+
 ### **WelcomeScreen**
 ```typescript
 interface WelcomeScreenProps {
@@ -252,12 +262,13 @@ interface WelcomeScreenProps {
 }
 ```
 
-**Features:**
-- Complete welcome experience
-- Hero section with quick actions
-- Smart input integration
-- Responsive layout
-- Accessibility compliance
+**Enhanced Accessibility Features:**
+- **Skip links** for quick navigation to actions and input
+- **ARIA labels** for all interactive elements with descriptive context
+- **Screen reader announcements** when actions are selected
+- **Keyboard navigation** with arrow keys between quick actions
+- **Semantic HTML structure** with proper headings and landmarks
+- **Focus management** with visual focus indicators
 
 **Usage:**
 ```tsx
@@ -271,25 +282,61 @@ interface WelcomeScreenProps {
 />
 ```
 
+**Accessibility Features:**
+- Skip links: "Skip to quick actions" and "Skip to main input"
+- Enhanced ARIA labels for quick actions with context
+- Screen reader announcements for user feedback
+- Keyboard navigation support (arrow keys, Home, End)
+- Proper focus management and indicators
+
 ## ♿ **Accessibility Features**
 
-### **Keyboard Navigation**
-- Full keyboard support for all interactive elements
-- Tab order management
-- Focus indicators
-- Keyboard shortcuts
+### **Skip Links**
+- **Skip to quick actions** - Allows users to jump directly to the main action buttons
+- **Skip to main input** - Provides quick access to the message input area
+- Visible on focus for keyboard users, hidden otherwise
+- Properly positioned and styled for accessibility
 
 ### **Screen Reader Support**
-- ARIA labels and descriptions
-- Live regions for dynamic content
-- Semantic HTML structure
-- Screen reader announcements
+- **ARIA labels and descriptions** - All interactive elements have descriptive labels
+- **Live regions for dynamic content** - Screen reader announcements for user actions
+- **Semantic HTML structure** - Proper heading hierarchy and landmark regions
+- **Screen reader announcements** - Contextual feedback for user interactions
+- **Role attributes** - Proper roles for complex UI components
+
+### **Keyboard Navigation**
+- **Full keyboard support** for all interactive elements
+- **Tab order management** - Logical navigation flow
+- **Focus indicators** - Clear visual focus states with ring styling
+- **Keyboard shortcuts** - Arrow key navigation for quick actions
+- **Focus trapping** - Available for modal dialogs and complex components
+- **Escape key support** - Consistent escape behavior
+
+### **Enhanced Interactive Elements**
+- **AccessibleButton** - Enhanced button component with:
+  - Full keyboard support (Enter and Space key activation)
+  - ARIA attributes and states
+  - Loading states with proper announcements
+  - Disabled state handling
+  - Focus management
+- **AccessibleInput** - Enhanced input component with:
+  - Proper labeling and descriptions
+  - Error state handling with ARIA
+  - Required field indicators
+  - Helper text associations
 
 ### **Visual Accessibility**
-- High contrast mode support
-- Reduced motion preferences
-- Focus management
-- Color contrast compliance
+- **High contrast mode support** - Automatic detection and adaptation
+- **Reduced motion preferences** - Respects user motion preferences
+- **Focus management** - Clear focus indicators throughout the application
+- **Color contrast compliance** - WCAG compliant color combinations
+- **Text scaling support** - Works with browser zoom and text scaling
+
+### **User Preference Detection**
+- **useHighContrastMode** hook - Detects system high contrast preferences
+- **useReducedMotion** hook - Respects reduced motion preferences
+- **Dynamic styling** - Adapts UI based on accessibility preferences
+- **Media query integration** - Responds to system accessibility settings
 
 ## 📱 **Responsive Design**
 
@@ -366,11 +413,25 @@ xl: 1280px  /* Extra large devices */
 ## 📚 **Usage Guidelines**
 
 ### **Best Practices**
-1. **Consistency** - Use components as intended
-2. **Accessibility** - Always provide proper labels
+1. **Consistency** - Use components as intended, especially AccessibleButton and AccessibleInput
+2. **Accessibility** - Always provide proper ARIA labels and semantic HTML
 3. **Performance** - Optimize for speed and efficiency
 4. **Responsiveness** - Test across all device sizes
 5. **Documentation** - Document custom implementations
+6. **Skip Links** - Include skip links for complex navigation areas
+7. **Screen Reader Support** - Test with screen readers and provide announcements
+8. **Keyboard Navigation** - Ensure all functionality is keyboard accessible
+9. **User Preferences** - Respect high contrast and reduced motion preferences
+
+### **Accessibility Guidelines**
+- **Use AccessibleButton** instead of regular buttons for all interactive elements
+- **Use AccessibleInput** for form inputs with proper labeling
+- **Provide skip links** for main navigation areas
+- **Include ARIA labels** that describe the element's purpose and context
+- **Test keyboard navigation** - all functionality should be accessible via keyboard
+- **Announce dynamic changes** using the useAnnouncements hook
+- **Respect user preferences** for motion and contrast using the provided hooks
+- **Use semantic HTML** elements for proper screen reader interpretation
 
 ### **Common Patterns**
 - Always wrap interactive elements in accessible containers
@@ -382,13 +443,108 @@ xl: 1280px  /* Extra large devices */
 ### **Anti-Patterns**
 - Don't override component styles without good reason
 - Avoid hardcoded values - use design tokens
-- Don't skip accessibility features
+- **Don't skip accessibility features** - always use AccessibleButton/AccessibleInput
 - Avoid complex nested component structures
 - Don't ignore responsive design requirements
+- **Don't create buttons without proper ARIA labels**
+- **Avoid using regular HTML buttons** when AccessibleButton is available
+- **Don't forget skip links** for complex navigation areas
+- **Don't ignore keyboard navigation** - test with keyboard only
+- **Don't hardcode motion animations** - respect reduced motion preferences
 
----
+## 🎯 **Accessibility Hooks and Utilities**
 
-This component library provides a solid foundation for building consistent, accessible, and performant user interfaces while maintaining the flexibility to adapt to future requirements.
+### **useHighContrastMode**
+Detects when the user has enabled high contrast mode in their system preferences.
+
+```typescript
+const isHighContrast = useHighContrastMode();
+
+// Use in component styling
+<div className={`component ${isHighContrast ? 'high-contrast' : ''}`}>
+  Content
+</div>
+```
+
+### **useReducedMotion**
+Detects when the user prefers reduced motion and adapts animations accordingly.
+
+```typescript
+const prefersReducedMotion = useReducedMotion();
+
+// Conditionally apply animations
+<div className={`element ${
+  prefersReducedMotion 
+    ? 'transition-none' 
+    : 'animate-pulse'
+}`}>
+  Content
+</div>
+```
+
+### **useAnnouncements**
+Provides screen reader announcements for dynamic content changes.
+
+```typescript
+const { announce } = useAnnouncements();
+
+const handleAction = () => {
+  doSomething();
+  announce('Action completed successfully', 'polite');
+};
+```
+
+### **useKeyboardNavigation**
+Manages keyboard navigation state and focus for complex components.
+
+```typescript
+const { focusedIndex, setFocusedIndex, isNavigating } = useKeyboardNavigation();
+
+const handleKeyDown = (e: KeyboardEvent, index: number) => {
+  if (e.key === 'ArrowRight') {
+    setFocusedIndex((index + 1) % items.length);
+  }
+};
+```
+
+### **useFocusManagement**
+Provides utilities for managing focus in complex components.
+
+```typescript
+const { focusRef, focusElement, trapFocus } = useFocusManagement();
+
+// Focus an element programmatically
+<button ref={focusRef} onClick={focusElement}>
+  Focus me
+</button>
+
+// Trap focus in a modal
+useEffect(() => {
+  trapFocus(modalRef);
+}, []);
+```
+
+## 🎨 **Accessibility Demo Component**
+
+The `AccessibilityDemo` component demonstrates the usage of accessibility features:
+
+```tsx
+import AccessibilityDemo from './components/atoms/AccessibilityDemo';
+
+<AccessibilityDemo className="my-4" />
+```
+
+**Features demonstrated:**
+- High contrast mode detection and adaptation
+- Reduced motion preference handling
+- AccessibleButton variations
+- Screen reader announcements
+- Focus management
+- Dynamic styling based on user preferences
+
+**Overview**
+
+This component library provides a solid foundation for building consistent, accessible, and performant user interfaces while maintaining the flexibility to adapt to future requirements. All components follow WCAG guidelines and provide comprehensive accessibility support out of the box.
 
 
 
