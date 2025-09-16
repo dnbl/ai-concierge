@@ -1,0 +1,8 @@
+
+{
+  "name": "IE AI Concierge",
+  "description": "An AI agent for the premium car brand, 'IE'. The agent, named Aura, assists users with account management, sales inquiries, service scheduling, and troubleshooting by leveraging contextual fleet data and user-provided images/videos.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
