@@ -11,7 +11,8 @@
     ],
     "skipLibCheck": true,
     "types": [
-      "node"
+      "node",
+      "jest"
     ],
     "moduleResolution": "bundler",
     "isolatedModules": true,
@@ -46,6 +47,13 @@
   "exclude": [
     "node_modules",
     "dist",
-    "build"
+    "build",
+    "tests/**/*",
+    "stories/**/*",
+    "src/stories/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.ts", 
+    "**/*.stories.tsx"
   ]
 }

@@ -6,11 +6,16 @@ import ChatWindow from './components/ChatWindow';
 import SmartInput from './components/molecules/SmartInput';
 import ImageViewerModal from './components/ImageViewerModal';
 import { ENHANCED_VEHICLE_DETAILS, ENHANCED_SERVICE_HISTORY, ENHANCED_DEALERS } from './data/enhancedMockData';
-import LoadingSpinner from './components/atoms/LoadingSpinner';
+import { SpinnerLoader } from './components/atoms/LoadingStates';
 import { useAppStore } from './store/useAppStore';
-import { ToastProvider } from './components/atoms/Toast';
+import { useUserProfile, initializeUserProfile } from './store/useUserProfile';
+import { ToastProvider, useToast } from './components/atoms/Toast';
 import ErrorBoundary from './components/atoms/ErrorBoundary';
+import ThemeProvider from './components/atoms/ThemeProvider';
+import ThemeToggle from './components/atoms/ThemeToggle';
 import WelcomeScreen from './components/organisms/WelcomeScreen';
+import './i18n'; // Initialize i18n
+import { useTranslation } from 'react-i18next';
 
 const MOCK_FLEET: Vehicle[] = [
     { id: '1', vin: 'JN8AZ13E35T000123', model: 'IE-Sedan', imageUrl: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop&crop=center' },
@@ -19,7 +24,9 @@ const MOCK_FLEET: Vehicle[] = [
 ];
 
 const App: React.FC = () => {
-    // Zustand store
+    const { t } = useTranslation();
+    
+    // Zustand stores
     const {
         messages,
         fleet,
@@ -41,9 +48,13 @@ const App: React.FC = () => {
     // Local state for UI interactions
     const [attachment, setAttachment] = useState<File | null>(null);
     const [imageViewerUrl, setImageViewerUrl] = useState<string | null>(null);
+    const [lastUserMessage, setLastUserMessage] = useState<{prompt: string, attachment: File | null} | null>(null);
 
-    // Initialize store with mock data
+    // Initialize stores with mock data
     useEffect(() => {
+        // Initialize user profile
+        initializeUserProfile();
+        
         // Only clear messages, not fleet data
         if (messages.length > 0) {
             clearMessages();
@@ -66,7 +77,6 @@ const App: React.FC = () => {
             });
         }
     }, []);
-    const [lastUserMessage, setLastUserMessage] = useState<{prompt: string, attachment: File | null} | null>(null);
 
     const handleSend = async (prompt: string, file: File | null = null) => {
         if (ui.isLoading) return;
@@ -127,76 +137,79 @@ const App: React.FC = () => {
     
     return (
         <ErrorBoundary>
-            <ToastProvider>
-                <div className="h-screen bg-gray-900 flex flex-col">
-                    {/* Header - Dark mode ChatGPT style */}
-                    <header className="border-b border-gray-700 bg-gray-900 px-4 py-3">
-                        <div className="max-w-3xl mx-auto flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">IE</span>
+            <ThemeProvider>
+                <ToastProvider>
+                    <div className="h-screen bg-theme-primary flex flex-col">
+                        {/* Header - Theme-aware */}
+                        <header className="border-b border-theme-primary bg-theme-primary px-4 py-3">
+                            <div className="max-w-3xl mx-auto flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                        <span className="text-white font-bold text-sm">IE</span>
+                                    </div>
+                                    <div>
+                                        <h1 className="text-lg font-semibold text-theme-primary">{t('app.title')}</h1>
+                                        <p className="text-sm text-theme-tertiary">{t('app.subtitle')}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h1 className="text-lg font-semibold text-white">Aura AI Assistant</h1>
-                                    <p className="text-sm text-gray-400">Your IE Vehicle Concierge</p>
+                                <div className="flex items-center gap-2">
+                                    <ThemeToggle />
+                                    <button 
+                                        onClick={clearAll}
+                                        className="text-sm text-theme-tertiary hover:text-theme-primary px-3 py-1 rounded-md hover:bg-theme-secondary transition-colors"
+                                    >
+                                        {t('app.newChat')}
+                                    </button>
                                 </div>
                             </div>
-                            <button 
-                                onClick={clearAll}
-                                className="text-sm text-gray-400 hover:text-white px-3 py-1 rounded-md hover:bg-gray-800 transition-colors"
-                            >
-                                New Chat
-                            </button>
-                        </div>
-                    </header>
+                        </header>
 
-                    {/* Main Content Area */}
-                    <main className="flex-1 flex flex-col max-w-3xl mx-auto w-full">
-                        {messages.length === 0 ? (
-                            <WelcomeScreen
-                                onActionClick={(action) => handleSend(action)}
-                                onSendMessage={(message) => handleSend(message, attachment)}
-                                onAttachmentClick={() => setAttachment(null)}
-                                className="flex-1"
-                            />
-                        ) : (
-                            <>
-                                {/* Chat Messages */}
-                                <div className="flex-1 overflow-y-auto">
-                                    <ChatWindow
-                                        messages={messages}
-                                        fleet={fleet}
-                                        dealers={dealers}
-                                        vehicleDetails={vehicleDetails}
-                                        serviceHistory={serviceHistory}
-                                        onAddVehicle={handleAddVehicle}
-                                        onImageClick={setImageViewerUrl}
-                                        onRetry={handleRetry}
-                                        onSuggestionClick={(prompt) => handleSend(prompt)}
-                                    />
-                                </div>
-                                
-                                {/* Input Area - Fixed at bottom */}
-                                <div className="border-t border-gray-700 bg-gray-900 p-4">
-                                    <SmartInput
-                                        placeholder="Message Aura AI..."
-                                        onSend={(message) => handleSend(message, attachment)}
-                                        onAttachmentClick={() => setAttachment(null)}
-                                        showAttachments={true}
-                                        showVoice={true}
-                                        disabled={ui.isLoading}
-                                        className="w-full"
-                                    />
-                                </div>
-                            </>
+                        {/* Main Content Area */}
+                        <main className="flex-1 flex flex-col max-w-3xl mx-auto w-full">
+                            {messages.length === 0 ? (
+                                <WelcomeScreen
+                                    onActionClick={(action) => handleSend(action)}
+                                    onSendMessage={(message, file) => handleSend(message, file)}
+                                    className="flex-1"
+                                />
+                            ) : (
+                                <>
+                                    {/* Chat Messages */}
+                                    <div className="flex-1 overflow-y-auto">
+                                        <ChatWindow
+                                            messages={messages}
+                                            fleet={fleet}
+                                            dealers={dealers}
+                                            vehicleDetails={vehicleDetails}
+                                            serviceHistory={serviceHistory}
+                                            onAddVehicle={handleAddVehicle}
+                                            onImageClick={setImageViewerUrl}
+                                            onRetry={handleRetry}
+                                            onSuggestionClick={(prompt) => handleSend(prompt)}
+                                        />
+                                    </div>
+                                    
+                                    {/* Input Area - Fixed at bottom */}
+                                    <div className="border-t border-theme-primary bg-theme-primary p-4">
+                                        <SmartInput
+                                            placeholder={t('welcome.inputPlaceholder')}
+                                            onSend={(message, file) => handleSend(message, file)}
+                                            showAttachments={true}
+                                            showVoice={true}
+                                            disabled={ui.isLoading}
+                                            className="w-full"
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </main>
+                        
+                        {imageViewerUrl && (
+                            <ImageViewerModal imageUrl={imageViewerUrl} onClose={() => setImageViewerUrl(null)} />
                         )}
-                    </main>
-                    
-                    {imageViewerUrl && (
-                        <ImageViewerModal imageUrl={imageViewerUrl} onClose={() => setImageViewerUrl(null)} />
-                    )}
-                </div>
-            </ToastProvider>
+                    </div>
+                </ToastProvider>
+            </ThemeProvider>
         </ErrorBoundary>
     );
 };
