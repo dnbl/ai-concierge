@@ -125,12 +125,22 @@ export const useAppStore = create<AppState>()(
         })),
       
       toggleTheme: () =>
-        set((state) => ({
-          ui: {
-            ...state.ui,
-            theme: state.ui.theme === 'dark' ? 'light' : 'dark',
-          },
-        })),
+        set((state) => {
+          const newTheme = state.ui.theme === 'dark' ? 'light' : 'dark';
+          
+          // Update body attribute for correct styling
+          if (typeof document !== 'undefined') {
+            document.body.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+          }
+          
+          return {
+            ui: {
+              ...state.ui,
+              theme: newTheme,
+            },
+          };
+        }),
       
       toggleSidebar: () =>
         set((state) => ({
@@ -161,7 +171,11 @@ export const useAppStore = create<AppState>()(
         set({
           messages: [],
           currentMessage: '',
+          fleet: [],
           selectedVehicle: null,
+          dealers: [],
+          vehicleDetails: {},
+          serviceHistory: {},
           ui: {
             isLoading: false,
             currentView: 'chat',
@@ -182,6 +196,13 @@ export const useAppStore = create<AppState>()(
           notifications: state.ui.notifications,
         },
       }),
+      onRehydrateStorage: () => (state) => {
+        // Set initial theme on body when store is rehydrated
+        if (state && typeof document !== 'undefined') {
+          document.body.setAttribute('data-theme', state.ui.theme);
+          document.documentElement.setAttribute('data-theme', state.ui.theme);
+        }
+      },
     }
   )
 );

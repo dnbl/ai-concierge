@@ -4,7 +4,7 @@ import Badge from '../atoms/Badge';
 import Icon from '../atoms/Icon';
 import { Vehicle } from '../../types';
 
-export interface VehicleCardProps {
+export interface VehicleCardEnhancedProps {
   vehicle: Vehicle;
   onClick?: () => void;
   showActions?: boolean;
@@ -12,7 +12,7 @@ export interface VehicleCardProps {
   onBookService?: () => void;
 }
 
-const VehicleCard: React.FC<VehicleCardProps> = ({
+const VehicleCardEnhanced: React.FC<VehicleCardEnhancedProps> = ({
   vehicle,
   onClick,
   showActions = false,
@@ -89,5 +89,5 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   );
 };
 
-export default VehicleCard;
+export default VehicleCardEnhanced;
 
