@@ -14,6 +14,7 @@ import ErrorBoundary from './components/atoms/ErrorBoundary';
 import WelcomeScreen from './components/organisms/WelcomeScreen';
 import SkipLinks from './components/atoms/SkipLinks';
 import ThemeToggle from './components/atoms/ThemeToggle';
+import { performanceMonitor } from './utils/performanceMonitoring';
 
 const MOCK_FLEET: Vehicle[] = [
     { id: '1', vin: 'JN8AZ13E35T000123', model: 'IE-Sedan', imageUrl: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop&crop=center' },
@@ -47,7 +48,23 @@ const AppContent: React.FC = () => {
     const [attachment, setAttachment] = useState<File | null>(null);
     const [imageViewerUrl, setImageViewerUrl] = useState<string | null>(null);
 
-    // Initialize store with mock data
+    // Initialize performance monitoring in development
+    useEffect(() => {
+        if (process.env.NODE_ENV === 'development') {
+            const unsubscribe = performanceMonitor.onMetric((metric) => {
+                if (metric.rating === 'poor') {
+                    toastHelpers.warning(
+                        'Performance Warning',
+                        `${metric.name} is performing poorly: ${metric.value.toFixed(2)}ms`
+                    );
+                }
+            });
+            
+            return unsubscribe;
+        }
+        // Return empty function if not in development
+        return () => {};
+    }, [toastHelpers]);
     useEffect(() => {
         // Only clear messages, not fleet data
         if (messages.length > 0) {
